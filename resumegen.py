@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 ResumeGen: A tool to convert JSON resumes into formatted Word documents.
 """
@@ -92,6 +90,20 @@ class ResumeGen:
         try:
             # Add header
             self.doc.add_heading(resume_data["header"]["name"], 0)
+
+            # Add phone, email, and address if provided in the header
+            contact_info = []
+            if "phone" in resume_data["header"] and resume_data["header"]["phone"]:
+                contact_info.append(resume_data["header"]["phone"])
+            if "email" in resume_data["header"] and resume_data["header"]["email"]:
+                contact_info.append(resume_data["header"]["email"])
+            if "address" in resume_data["header"] and resume_data["header"]["address"]:
+                contact_info.append(resume_data["header"]["address"])
+            if contact_info:
+                contact_paragraph = self.doc.add_paragraph()
+                contact_paragraph.style = "Normal"
+                contact_paragraph.add_run(" | ".join(contact_info))
+
             self.doc.add_heading(resume_data["header"]["title"], 3)
 
             # Sort and process content sections
